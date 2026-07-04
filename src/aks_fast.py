@@ -35,41 +35,15 @@ def _find_upper_bound_of_a(n: int, r: int) -> int:
     return int(math.sqrt(r) * math.log2(n))
 
 
-def poly_mul(a: List[int], b: List[int], r: int, mod: int) -> List[int]:
-    pa = flint.nmod_poly(a, mod)
-    pb = flint.nmod_poly(b, mod)
-    product = pa * pb
-
-    coeffs = product.coeffs()
-    poly = [0] * r
-    for i, c in enumerate(coeffs):
-        poly[i % r] = (poly[i % r] + int(c)) % mod
-    return poly
-
-
-# do the fast exponentiation of the polynomial
-def poly_pow(base: List[int], exp: int, r: int, mod: int) -> List[int]:
-    res = [0] * r
-    res[0] = 1
-
-    while exp > 0:
-        if exp & 1:
-            res = poly_mul(res, base, r, mod)
-        base = poly_mul(base, base, r, mod)
-        exp >>= 1
-
-    return res
-
-
+# use flint to do the computation rather than half python and half flint
 def _verify(a: int, n: int, r: int) -> bool:
-    base = [0] * r
-    base[0] = a % n
-    base[1 % r] = (base[1 % r] + 1) % n
-    lhs = poly_pow(base, n, r, n)
+    modulus = flint.nmod_poly([0] * r + [1], n) - flint.nmod_poly([1], n)
 
-    rhs = [0] * r
-    rhs[n % r] = (rhs[n % r] + 1) % n
-    rhs[0] = (rhs[0] + a) % n
+    base = flint.nmod_poly([a % n, 1], n)
+    lhs = base.pow_mod(n, modulus)
+
+    rhs = flint.nmod_poly([0] * (n % r) + [1], n)
+    rhs += flint.nmod_poly([a % n], n)
 
     return lhs == rhs
 
@@ -87,11 +61,6 @@ def _aks_test(n: int) -> bool:
     l = _find_upper_bound_of_a(n, r)
 
     for a in range(1, l + 1):
-        g = math.gcd(a, n)
-        if 1 < g < n:
-            return False
-
-        # do the verification here
         if not _verify(a, n, r):
             return False
 

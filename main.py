@@ -14,6 +14,7 @@ ALGORITHMS = {
     "aks": is_prime_aks,
     "aks_numpy": is_prime_aks_numpy,
     "aks_fft": is_prime_aks_fft,
+    "aks_fast": is_prime_aks_fast,
 
     # short name
     "t": is_prime_trial_division,
