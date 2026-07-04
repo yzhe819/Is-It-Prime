@@ -10,5 +10,6 @@ platformdirs==4.10.0
 pluggy==1.6.0
 Pygments==2.20.0
 pytest==9.1.1
+python-flint==0.9.0
 pytokens==0.4.1
 sympy==1.14.0
