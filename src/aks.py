@@ -34,9 +34,9 @@ def _find_min_r(n: int) -> int:
     # aks supports that the suitable r must exists
     # so the loop will end when the suitable r is found
     while r < safety_limit:
-        g = gcd(n, r)
+        g = math.gcd(n, r)
 
-        if 1 < g and g < n:
+        if 1 < g < n:
             raise ValueError(f"n is composite, found factor {g}")
 
         if g == 1:
@@ -51,7 +51,50 @@ def _find_min_r(n: int) -> int:
 
 
 def _find_upper_bound_of_a(n: int, r: int) -> int:
-    return math.sqrt(r) * math.log2(n)
+    return int(math.sqrt(r) * math.log2(n))
+
+
+def poly_mul(a: List[int], b: List[int], r: int, mod: int) -> List[int]:
+    poly = [0] * r
+
+    for i in range(r):
+        if a[i] == 0:
+            continue
+        for j in range(r):
+            if b[j] == 0:
+                continue
+            poly[(i + j) % r] += a[i] * b[j]
+            poly[(i + j) % r] %= mod
+
+    return poly
+
+
+# do the fast exponentiation of the polynomial
+def poly_pow(base: List[int], exp: int, r: int, mod: int) -> List[int]:
+    result = [0] * r
+    result[0] = 1
+    base = base[:]
+
+    while exp > 0:
+        if exp & 1:
+            result = poly_mul(result, base, r, mod)
+        base = poly_mul(base, base, r, mod)
+        exp >>= 1
+
+    return result
+
+
+def _verify(a: int, n: int, r: int) -> bool:
+    base = [0] * r
+    base[0] = a % n
+    base[1 % r] = (base[1 % r] + 1) % n
+    lhs = poly_pow(base, n, r, n)
+
+    rhs = [0] * r
+    rhs[n % r] = (rhs[n % r] + 1) % n
+    rhs[0] = (rhs[0] + a) % n
+
+    return lhs == rhs
 
 
 # AKS Primality Test
@@ -59,13 +102,21 @@ def _aks_test(n: int) -> bool:
     if _is_perfect_power(n):
         return False
 
-    r = _find_min_r(n)
-    L = _find_upper_bound_of_a(n, r)
+    try:
+        r = _find_min_r(n)
+    except (ValueError, RuntimeError):
+        return False
 
-    for a in range(1, L + 1):
-        if gcd(a, n) > 1:
+    l = _find_upper_bound_of_a(n, r)
+
+    for a in range(1, l + 1):
+        g = math.gcd(a, n)
+        if 1 < g < n:
             return False
+
         # do the verification here
+        if not _verify(a, n, r):
+            return False
 
     return True
 
