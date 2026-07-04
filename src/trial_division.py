@@ -10,8 +10,11 @@ def _trial_division_test(n: int) -> bool:
 
 
 def is_prime(n: int) -> bool:
-    if n == 2:
-        return True
-    if n < 2 or n % 2 == 0:
+    if n < 2:
         return False
+    if n in (2, 3):
+        return True
+    if n % 2 == 0:
+        return False
+
     return _trial_division_test(n)
