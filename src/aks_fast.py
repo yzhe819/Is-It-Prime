@@ -5,6 +5,7 @@ import flint
 from typing import List
 from sympy import perfect_power
 from sympy import n_order
+from multiprocessing import Pool, cpu_count
 
 
 def _find_min_r(n: int) -> int:
@@ -48,6 +49,11 @@ def _verify(a: int, n: int, r: int) -> bool:
     return lhs == rhs
 
 
+def _aks_worker(args):
+    a, n, r = args
+    return _verify(a, n, r)
+
+
 # AKS Primality Test
 def _aks_test(n: int) -> bool:
     if bool(perfect_power(n)):
@@ -60,9 +66,14 @@ def _aks_test(n: int) -> bool:
 
     l = _find_upper_bound_of_a(n, r)
 
-    for a in range(1, l + 1):
-        if not _verify(a, n, r):
-            return False
+    # parallel task for different bases
+    tasks = ((a, n, r) for a in range(1, l + 1))
+    with Pool(cpu_count()) as pool:
+        # streaming + early stop
+        for ok in pool.imap_unordered(_aks_worker, tasks, chunksize=1):
+            if not ok:
+                pool.terminate()
+                return False
 
     return True
 

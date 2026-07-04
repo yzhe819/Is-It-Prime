@@ -15,7 +15,6 @@ ALGORITHMS = {
     "aks_numpy": is_prime_aks_numpy,
     "aks_fft": is_prime_aks_fft,
     "aks_fast": is_prime_aks_fast,
-
     # short name
     "t": is_prime_trial_division,
     "f": is_prime_fermat,
@@ -34,7 +33,7 @@ def main():
         "-a",
         "--algorithm",
         choices=ALGORITHMS.keys(),
-        default="miller_rabin", # default to miller-rabin because it is fast and reliable
+        default="miller_rabin",  # default to miller-rabin because it is fast and reliable
         help="Primality test algorithm to use (default: trial).",
     )
     args = parser.parse_args()
