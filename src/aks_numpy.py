@@ -1,30 +1,10 @@
+# this implementation is based on the numpy and sympy libray
+# only keep the core logic and remove the unnecessary code
 import math
+import numpy as np
 from typing import List
-
-
-# to check if exists m**k = n
-def _is_perfect_power(n: int) -> bool:
-    if n < 4:
-        return False
-
-    L = n.bit_length()
-    for k in range(2, L):
-        m = 2
-        while m**k <= n:
-            if m**k == n:
-                return True
-            m += 1
-    return False
-
-
-def _find_order(n: int, r: int) -> int:
-    n = n % r
-    k = 1
-    value = n % r
-    while value != 1:
-        value = (value * n) % r
-        k += 1
-    return k
+from sympy import perfect_power
+from sympy import n_order
 
 
 def _find_min_r(n: int) -> int:
@@ -41,7 +21,7 @@ def _find_min_r(n: int) -> int:
             raise ValueError(f"n is composite, found factor {g}")
 
         if g == 1:
-            order = _find_order(n, r)
+            order = n_order(n, r)
             if order > threshold:
                 return r
 
@@ -56,17 +36,10 @@ def _find_upper_bound_of_a(n: int, r: int) -> int:
 
 
 def poly_mul(a: List[int], b: List[int], r: int, mod: int) -> List[int]:
+    conv = np.convolve(np.array(a, dtype=object), np.array(b, dtype=object))
     poly = [0] * r
-
-    for i in range(r):
-        if a[i] == 0:
-            continue
-        for j in range(r):
-            if b[j] == 0:
-                continue
-            poly[(i + j) % r] += a[i] * b[j]
-            poly[(i + j) % r] %= mod
-
+    for i, coef in enumerate(conv):
+        poly[i % r] = (poly[i % r] + coef) % mod
     return poly
 
 
@@ -100,7 +73,7 @@ def _verify(a: int, n: int, r: int) -> bool:
 
 # AKS Primality Test
 def _aks_test(n: int) -> bool:
-    if _is_perfect_power(n):
+    if bool(perfect_power(n)):
         return False
 
     try:

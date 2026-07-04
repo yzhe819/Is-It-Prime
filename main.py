@@ -3,6 +3,7 @@ from src.trial_division import is_prime as is_prime_trial_division
 from src.fermat import is_prime as is_prime_fermat
 from src.miller_rabin import is_prime as is_prime_miller_rabin
 from src.aks import is_prime as is_prime_aks
+from src.aks_numpy import is_prime as is_prime_aks_numpy
 
 # Map algorithm names (used on the command line) to their implementations
 ALGORITHMS = {
@@ -11,11 +12,13 @@ ALGORITHMS = {
     "fermat": is_prime_fermat,
     "miller_rabin": is_prime_miller_rabin,
     "aks": is_prime_aks,
+    "aks_numpy": is_prime_aks_numpy,
     # short name
     "t": is_prime_trial_division,
     "f": is_prime_fermat,
     "m": is_prime_miller_rabin,
     "a": is_prime_aks,
+    "an": is_prime_aks_numpy,
 }
 
 
@@ -27,7 +30,7 @@ def main():
         "-a",
         "--algorithm",
         choices=ALGORITHMS.keys(),
-        default="trial",
+        default="aks_numpy",
         help="Primality test algorithm to use (default: trial).",
     )
     args = parser.parse_args()
