@@ -232,7 +232,10 @@ CARMICHAEL_NUMBERS = [
     29341,  # 13 × 37 × 61
 ]
 
-@pytest.mark.xfail(reason="Carmichael numbers fool the Fermat test for almost every base a")
+
+@pytest.mark.xfail(
+    reason="Carmichael numbers fool the Fermat test for almost every base a"
+)
 @pytest.mark.parametrize("n", CARMICHAEL_NUMBERS)
 def test_carmichael_numbers_are_composite(n):
     assert is_prime(n) is False
