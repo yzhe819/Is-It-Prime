@@ -1,9 +1,11 @@
 import argparse
 from src.trial_division import is_prime as is_prime_trial_division
+from src.fermat import is_prime as is_prime_fermat
 
 # Map algorithm names (used on the command line) to their implementations
 ALGORITHMS = {
     "trial": is_prime_trial_division,
+    "fermat": is_prime_fermat,
 }
 
 
