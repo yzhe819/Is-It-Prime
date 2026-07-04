@@ -1,4 +1,4 @@
-# Trial Division Primality Test (n >= 3)
+# Trial Division Primality Test
 def _trial_division_test(n: int) -> bool:
     i = 3
     # use i * i <= n to avoid the calculation of the square root of n
@@ -14,7 +14,7 @@ def is_prime(n: int) -> bool:
         return False
     if n in (2, 3):
         return True
-    if n % 2 == 0:
+    if n % 2 == 0 or n % 3 == 0:
         return False
 
     return _trial_division_test(n)

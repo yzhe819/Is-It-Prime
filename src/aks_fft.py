@@ -104,7 +104,7 @@ def is_prime(n: int) -> bool:
         return False
     if n in (2, 3):
         return True
-    if n % 2 == 0:
+    if n % 2 == 0 or n % 3 == 0:
         return False
 
     return _aks_test(n)
