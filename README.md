@@ -2,7 +2,9 @@
 
 > How can we quickly tell whether a number is prime?
 
-For over two thousand years, people have wrestled with a deceptively simple question: given an integer $n$, how can we quickly determine whether it's prime?
+For over two thousand years, people have wrestled with a deceptively simple question: given an integer $n$, how can we quickly determine whether it's prime? (eg. n = 170141183460469231731687303715884105727)
+
+![Is-It-Prime](./wiki/2026-07-05%2019.25.14.png)
 
 ### Trial Division: The Most Naive Approach
 
@@ -26,7 +28,7 @@ With the arrival of RSA, "is this number prime?" stopped being a purely academic
 
 Fermat's Little Theorem is one of the earliest and most important results in number theory.
 
-> Before diving in, a quick note on notation you'll see repeatedly: $\equiv$ means "congruent to," not "equal to."
+> Before diving in, a quick note on notation you'll see repeatedly: $\equiv$ means "congruent to" for modulo, not "equal to."
 >
 > $$b^m \equiv b \pmod{m}$$
 >

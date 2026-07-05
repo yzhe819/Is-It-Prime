@@ -4,6 +4,8 @@ from src.fermat import is_prime as is_prime_fermat
 from src.miller_rabin import is_prime as is_prime_miller_rabin
 from src.aks import is_prime as is_prime_aks
 from src.aks_numpy import is_prime as is_prime_aks_numpy
+from src.aks_fft import is_prime as is_prime_aks_fft
+from src.aks_fast import is_prime as is_prime_aks_fast
 
 # Map algorithm names (used on the command line) to their implementations
 ALGORITHMS = {
