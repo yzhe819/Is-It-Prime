@@ -1,5 +1,7 @@
 # Is-It-Prime
 
+[English](./README.md) · [中文](./wiki/README_zh.md)
+
 > How can we quickly tell whether a number is prime?
 
 For over two thousand years, people have wrestled with a deceptively simple question: given an integer $n$, how can we quickly determine whether it's prime? (eg. n = 170141183460469231731687303715884105727)
